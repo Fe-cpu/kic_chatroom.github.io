@@ -11,15 +11,10 @@
 
   <style>
     :root {
-      /* Light Theme (Standard) */
+      /* Light Theme */
       --bg-main: radial-gradient(circle at top, #e5e7eb 0, #d1d5db 40%, #9ca3af 100%);
       --text-main: #111827;
       --text-muted: #4b5563;
-
-      --chat-surface: #ffffff;
-      --chat-inner-bg: linear-gradient(180deg, #ffffff 0%, #fff7fb 40%, #ffeefe 100%);
-      --chat-border: rgba(192, 38, 211, 0.35);
-      --chat-shadow: 0 20px 40px rgba(15, 23, 42, 0.28);
 
       --header-title: #111827;
       --header-subtitle: #4b5563;
@@ -30,12 +25,6 @@
       --button-bg-hover: #020617;
       --button-text: #f9fafb;
       --button-border: rgba(15, 23, 42, 0.1);
-
-      --msg-bot-bg: rgba(236, 72, 153, 0.05);
-      --msg-user-bg: rgba(147, 51, 234, 0.06);
-      --msg-border: rgba(236, 72, 153, 0.7);
-      --msg-shadow: 0 6px 18px rgba(148, 27, 109, 0.18);
-      --msg-time: #f97373;
     }
 
     body.theme-dark {
@@ -43,13 +32,6 @@
       --bg-main: radial-gradient(circle at top, #020617 0, #020617 45%, #000 100%);
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-
-      --chat-surface: rgba(15, 23, 42, 0.96);
-      --chat-inner-bg: radial-gradient(circle at top, #020617 0%, #020617 40%, #020617 100%);
-      --chat-border: rgba(244, 114, 182, 0.6);
-      --chat-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.9),
-        0 0 0 1px rgba(148, 163, 184, 0.25);
 
       --header-title: #e5e7eb;
       --header-subtitle: #9ca3af;
@@ -60,12 +42,6 @@
       --button-bg-hover: #f9fafb;
       --button-text: #111827;
       --button-border: rgba(156, 163, 175, 0.5);
-
-      --msg-bot-bg: rgba(236, 72, 153, 0.12);
-      --msg-user-bg: rgba(129, 140, 248, 0.14);
-      --msg-border: rgba(251, 113, 133, 0.9);
-      --msg-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
-      --msg-time: #fecaca;
     }
 
     /* Grundlayout */
@@ -168,28 +144,19 @@
       transform: translateY(0);
     }
 
-    /* Card + inner Hintergrund fürs Chatfeld */
+    /* Äußere Card – Höhe/Look, Rest macht theme2.css */
     .chat-container {
-      background: var(--chat-surface);
       border-radius: 26px;
-      box-shadow: var(--chat-shadow);
+      box-shadow:
+        0 20px 40px rgba(15, 23, 42, 0.35);
       overflow: hidden;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       transition:
-        background 0.3s ease,
-        box-shadow 0.3s ease,
-        border-color 0.3s ease;
-      border: 2px solid var(--chat-border);
-    }
-
-    /* Damit der weiße Bereich innen nicht so „leer“ wirkt */
-    .chat-container > div,
-    .chat-container .chatroom,
-    .chat-container [class*="conversation"],
-    .chat-container [class*="messages-wrapper"] {
-      background: var(--chat-inner-bg);
-      transition: background 0.3s ease;
+        box-shadow 0.3s ease;
+      /* Chat sichtbar machen */
+      height: 80vh;
+      max-height: 780px;
     }
 
     .chat-footer {
@@ -198,72 +165,6 @@
       font-size: 0.75rem;
       color: var(--footer-text);
       transition: color 0.3s ease;
-    }
-
-    /* ========= WAVE-ANIMATION FÜR NACHRICHTEN ========= */
-
-    @keyframes waveIn {
-      0% {
-        opacity: 0;
-        transform: translateY(14px) translateX(6px) scale(0.96) rotate(-3deg);
-      }
-      55% {
-        opacity: 1;
-        transform: translateY(-4px) translateX(0) scale(1.02) rotate(2deg);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) translateX(0) scale(1) rotate(0deg);
-      }
-    }
-
-    /* Generischer Selector, der bei den meisten Chatroom-Versionen greift */
-    .chat-container [class*="msg"],
-    .chat-container [class*="message"] {
-      border-radius: 999px !important;
-      box-shadow: var(--msg-shadow);
-      border: 1px solid var(--msg-border);
-      padding-inline: 14px !important;
-      padding-block: 8px !important;
-      animation: waveIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-      transform-origin: 0% 100%;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Bot / System Nachrichten (meist links) */
-    .chat-container [class*="msg"][class*="bot"],
-    .chat-container [class*="message"][class*="bot"],
-    .chat-container [class*="msg"]:not([class*="client"]):not([class*="user"]) {
-      background: var(--msg-bot-bg);
-    }
-
-    /* User Nachrichten (meist rechts) */
-    .chat-container [class*="msg"][class*="client"],
-    .chat-container [class*="msg"][class*="user"],
-    .chat-container [class*="message"][class*="client"],
-    .chat-container [class*="message"][class*="user"] {
-      background: var(--msg-user-bg);
-    }
-
-    /* Zeitstempel dezenter einfärben */
-    .chat-container [class*="time"],
-    .chat-container .timestamp,
-    .chat-container .message__meta {
-      color: var(--msg-time) !important;
-      font-size: 0.7rem !important;
-    }
-
-    /* Etwas mehr Abstand zwischen Nachrichten */
-    .chat-container [class*="list"],
-    .chat-container [class*="messages"] {
-      padding-inline: 18px !important;
-      padding-bottom: 16px !important;
-    }
-
-    .chat-container [class*="msg-row"],
-    .chat-container [class*="message-row"],
-    .chat-container [class*="msg-wrapper"] {
-      margin-bottom: 10px !important;
     }
   </style>
 </head>
@@ -294,4 +195,47 @@
     // Fail-fast hint if the script didn't load
     if (!window.Chatroom) {
       document.body.insertAdjacentHTML('beforeend',
-        '<div style="padding:12px;color:#fff;background:#c00;position:fixed;bottom:0;left:0;right:0;text-align:center;font-family:system-ui,sans-s
+        '<div style="padding:12px;color:#fff;background:#c00;position:fixed;bottom:0;left:0;right:0;text-align:center;font-family:system-ui,sans-serif;">Could not load Chatroom.js</div>');
+    }
+
+    var chatroom = new window.Chatroom({
+      host: "http://127.0.0.1:5005",           // URL bleibt gleich
+      title: "Chat with a bot",
+      container: document.querySelector(".chat-container"),
+      welcomeMessage: "Nice to meet youuuuuu.",
+      speechRecognition: "en-US",
+      voiceLang: "en-US"
+    });
+
+    chatroom.openChat();
+
+    // Theme Toggle Logic
+    (function () {
+      var toggleBtn = document.getElementById('themeToggle');
+      var body = document.body;
+
+      function setDarkMode(isDark) {
+        if (isDark) {
+          body.classList.add('theme-dark');
+          body.classList.remove('theme-light');
+          toggleBtn.querySelector('.icon').textContent = '☀️';
+          toggleBtn.querySelector('.label').textContent = 'Day';
+        } else {
+          body.classList.add('theme-light');
+          body.classList.remove('theme-dark');
+          toggleBtn.querySelector('.icon').textContent = '🌙';
+          toggleBtn.querySelector('.label').textContent = 'Night';
+        }
+      }
+
+      var dark = false; // Start im Light Mode
+      setDarkMode(dark);
+
+      toggleBtn.addEventListener('click', function () {
+        dark = !dark;
+        setDarkMode(dark);
+      });
+    })();
+  </script>
+</body>
+</html>
